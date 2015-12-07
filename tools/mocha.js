@@ -1,6 +1,23 @@
 var jsdom = require('jsdom')
 var chai = require('chai')
-var chaiImmutable = require('chai-immutable')
+var sinon= require('sinon-chai')
+var immutable = require('chai-immutable')
+
+require('babel/register')({
+  babelrc: '../.babelrc',
+})
+
+function noop() {
+  return null
+}
+
+require.extensions['.css']= noop
+require.extensions['.less']= noop
+require.extensions['.sass']= noop
+require.extensions['.scss']= noop
+require.extensions['.svg']= noop
+require.extensions['.png']= noop
+
 
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
 var win = doc.defaultView
@@ -14,4 +31,9 @@ Object.keys(window).forEach(function(key) {
   }
 })
 
-chai.use(chaiImmutable)
+global.window.getComputedStyle= function() {
+  return ['-webkit-']
+}
+
+chai.use(sinon)
+chai.use(immutable)

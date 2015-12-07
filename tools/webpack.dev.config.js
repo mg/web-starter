@@ -1,36 +1,34 @@
-var path = require('path')
 var webpack = require('webpack');
-var srcPath = path.join(__dirname + '/../', 'client');
+var path = require('path')
+
+var root = path.join(__dirname + '/../', 'dev');
+
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src/index.jsx'
+    `webpack-hot-middleware/client`,
+    `${root}/index.jsx`,
   ],
 
   output: {
-    path: './builds/dev',
+    path: root,
     filename: 'bundle.js',
+    publicPath: '/static/',
   },
 
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    modulesDirectories: ['node_modules', 'client']
+    modulesDirectories: ['node_modules', 'src']
   },
 
   module: {
     loaders: [
-      { test: /\.(js|jsx|es6)$/, loaders: ['react-hot', 'babel?stage=0&optional[]=runtime'], exclude: /node_modules/ },
+      { test: /\.(js|jsx)$/, loaders: ['babel?optional[]=runtime'], exclude: /node_modules/ },
       { test: /\.css$/, loader: 'style!css' },
     ],
   },
+
   node: {
     __filename: true
-  },
-
-  devServer: {
-    contentBase: './builds/dev',
-    hot: true,
   },
 
   plugins: [
